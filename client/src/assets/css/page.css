@@ -1,0 +1,17 @@
+ul li,
+ol li {
+    list-style-type: disc;
+    margin-left: 25px;
+}
+
+ol li {
+    list-style-type: decimal;
+}
+
+code{
+    background: #eee;
+}
+
+p{
+    word-wrap: break-word;
+}
