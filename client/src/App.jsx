@@ -1,26 +1,59 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import Home from './pages/Home'
-import Blog from './pages/Blog'
+import Home from './pages/Home';
+import Blog from './pages/Blog';
 import NavBar from './component/NavBar';
 import Editor from './pages/Editor';
-import { v4 as uuidv4 } from 'uuid';
+import Space from './pages/Space';
+import Auth from './pages/Auth';
+import { createContext, useState, useContext, useEffect } from 'react';
+
+export const Authcontext = createContext();
 
 function App() {
+  const [authdata, setauthdata] = useState({ validuser: false });
+  const [loading, setLoading] = useState(true);
+  const serverurl = 'http://localhost:3000'
+
+  useEffect(() => {
+    const data = localStorage.getItem('authdata');
+    if (data) {
+      const parsedData = JSON.parse(data);
+      if (parsedData.validuser) {
+        setauthdata(parsedData);
+      }
+    }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    if (authdata.validuser) {
+      localStorage.setItem('authdata', JSON.stringify(authdata));
+    }
+  }, [authdata]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <>
-      <NavBar />
+    <Authcontext.Provider value={{ authdata, setauthdata, serverurl }}>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/editor/:id" element={<Editor />} />
-          <Route path="/editor" element={<Editor />} />
-          <Route path="/blog/" element={<Navigate to="/" />} />
-          <Route path="/blog/:id" element={<Blog />} />
-        </Routes>
+        <>
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/editor/:id" element={authdata.validuser ? <Editor /> : <Navigate to="/auth" />} />
+            <Route path="/editor" element={authdata.validuser ? <Editor /> : <Navigate to="/auth" />} />
+            <Route path="/blog/" element={<Navigate to="/" />} />
+            <Route path="/blog/:id" element={<Blog />} />
+            <Route path="/space" element={<Navigate to="/auth" />} />
+            <Route path="/space/:userid" element={authdata.validuser ? <Space /> : <Navigate to="/auth" />} />
+          </Routes>
+        </>
       </BrowserRouter>
-    </>
-  )
+    </Authcontext.Provider>
+  );
 }
 
-export default App
+export default App;

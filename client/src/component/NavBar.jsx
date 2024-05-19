@@ -1,32 +1,47 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Authcontext } from '../App';
 
 const NavBar = () => {
+    const authdata = useContext(Authcontext);
+    const [menu, setmenu] = useState(true)
+
+    const logout = () => {
+        authdata.setauthdata({ validuser: false });
+        localStorage.clear('authdata')
+    }
+
     return (
         <header className="flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-white text-sm py-4">
             <nav className="max-w-[85rem] w-full mx-auto px-4 flex flex-wrap basis-full items-center justify-between" aria-label="Global">
-                <a className="sm:order-1 flex-none text-base font-medium uppercase text-black" href="#">z blogs</a>
+                <Link to={'/'}>
+                    <span className="sm:order-1 flex-none text-base font-medium uppercase text-black" href="#">z blogs</span>
+                </Link>
                 <div className="sm:order-3 flex items-center gap-x-2">
-                    <button type="button" className="sm:hidden hs-collapse-toggle p-2.5 inline-flex justify-center items-center gap-x-2 rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none" data-hs-collapse="#navbar-alignment" aria-controls="navbar-alignment" aria-label="Toggle navigation">
-                        <svg className="hs-collapse-open:hidden flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" x2="21" y1="6" y2="6" /><line x1="3" x2="21" y1="12" y2="12" /><line x1="3" x2="21" y1="18" y2="18" /></svg>
-                        <svg className="hs-collapse-open:block hidden flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
-                    </button>
-                    <i className="ri-search-line text-xl mr-3"></i>
-                    <button type="button" className="py-3 px-6 inline-flex items-center gap-x-2 text-sm font-normal rounded-full border border-gray-900 bg-black text-white shadow-sm hover:bg-transparent hover:text-black disabled:opacity-50 disabled:pointer-events-none">
-                        Get Started
+
+                    <button className='block sm:hidden' onClick={() => { setmenu(!menu) }}>
+                        <i className="ri-menu-4-line text-xl mr-2"></i>
                     </button>
 
+                    <i className="ri-search-line text-xl"></i>
+                    {authdata.authdata.validuser ? <button onClick={logout} className='text-xl ml-2 text-red-500 bg-red-100 w-10 h-10 flex justify-center items-center rounded-md'><i className="ri-logout-circle-line p-0"></i></button> : ''}
+
+                    <Link to={authdata.authdata.validuser ? 'editor' : 'auth'}>
+                        <button type="button" className="py-3 px-6 ml-2 inline-flex items-center gap-x-2 text-sm font-normal rounded-full border border-gray-900 bg-black text-white shadow-sm hover:bg-transparent hover:text-black disabled:opacity-50 disabled:pointer-events-none">
+                            {authdata.authdata.validuser ? <span><i className="ri-pencil-line"></i> New Blog</span> : 'Get Started  '}
+                        </button>
+                    </Link>
                 </div>
-                <div id="navbar-alignment" className="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow sm:grow-0 sm:basis-auto sm:block sm:order-2">
-                    <div className="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:mt-0 sm:ps-5">
-                        <a className="font-normal text-blue-500" href="#" aria-current="page">Home</a>
+                <div id="navbar-alignment" className={menu ? 'hidden sm:block ' : ' sm:block ' + "  overflow-hidden transition-all duration-300 basis-full grow sm:grow-0 sm:basis-auto  sm:order-2"}>
+                    < div className="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:mt-0 sm:ps-5">
+                        <Link to={'/'}>
+                            <span className="font-normal text-blue-500" href="#" aria-current="page">Home</span>
+                        </Link>
                         <a className="font-normal text-gray-600 hover:text-gray-400" href="#">Portfolio</a>
                     </div>
-
-
                 </div>
             </nav>
-        </header>
+        </header >
     );
 }
 

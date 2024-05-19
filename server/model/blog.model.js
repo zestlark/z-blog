@@ -16,6 +16,10 @@ const Blog = new mongoose.Schema({
     imageUrl: {
         type: String,
         required: false
+    },
+    draft: {
+        type: Boolean,
+        required: true
     }
 }, { timestamps: true })
 

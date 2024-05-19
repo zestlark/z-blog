@@ -4,12 +4,15 @@ const cors = require('cors');
 
 // Import router
 const blogRouter = require('./router/blogs.router.js');
+const authRouter = require('./router/auth.router.js')
 
 const app = express();
 
 app.use(cors()); // Enable CORS
 app.use(express.json()); // Parse JSON request bodies
 app.use('/blog', blogRouter);
+
+app.use('/auth', authRouter)
 
 mongoose.connect('mongodb+srv://kanojiyadeepak747:mDiJmKJ4PEahNY9t@cluster0.jbrm0wt.mongodb.net/App?retryWrites=true&w=majority')
     .then(() => {

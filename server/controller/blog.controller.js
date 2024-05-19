@@ -12,7 +12,17 @@ const addBlog = async (req, res) => {
 
 const getBlogs = async (req, res) => {
     try {
-        const blogs = await BlogModel.find({});
+        const blogs = await BlogModel.find({ draft: true });
+        res.status(200).json(blogs);
+    } catch (error) {
+        console.error('Error fetching blogs:', error);
+        res.status(500).json({ message: "Failed to fetch blogs", error: error.message });
+    }
+};
+
+const getAllBlogsOfUser = async (req, res) => {
+    try {
+        const blogs = await BlogModel.find({ userId: req.params.userid });
         res.status(200).json(blogs);
     } catch (error) {
         console.error('Error fetching blogs:', error);
@@ -64,5 +74,6 @@ module.exports = {
     getBlogs,
     getBlog,
     updateBlog,
-    deleteBlog
+    deleteBlog,
+    getAllBlogsOfUser,
 };

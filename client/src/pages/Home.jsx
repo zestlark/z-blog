@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Banner from '../component/Banner'
 import readAbleTime from '../functions/time.function.js'
 import LoadingAndError from '../component/LoadingAndError.jsx'
 import { Link } from 'react-router-dom'
+import moment from 'moment'
+import { Authcontext } from '../App.jsx'
 
 export default function Home() {
     const [blogs, setblogs] = useState([])
     const [sideblog, setsideblog] = useState([])
     const [error, seterror] = useState(false)
+
+    const authdata = useContext(Authcontext)
 
     const cleantext = (data) => {
         const div = document.createElement('div');
@@ -17,7 +21,7 @@ export default function Home() {
 
     useEffect(() => {
         try {
-            fetch(`http://localhost:3000/blog`)
+            fetch(authdata.serverurl + '/blog')
                 .then(res =>
                     res.json()
                 ).then(res => {
@@ -37,7 +41,7 @@ export default function Home() {
             <Banner />
             <div className='flex justify-center flex-col sm:flex-row'>
                 {/* main blog */}
-                <div className='flex flex-wrap container max-w-7xlmx-auto gap-5 mt-5 justify-center mb-5'>
+                <div className='flex flex-wrap container max-w-7xl mx-auto gap-5 mt-5 justify-center mb-5'>
                     {blogs.length === 0 ? <LoadingAndError error={error} /> : blogs.map(e => {
                         return (
                             <article className='w-[45%] md:max-w-[30%]' key={e?._id}>
@@ -52,7 +56,7 @@ export default function Home() {
                                                 {cleantext(e.body)}
                                             </p>
                                             <p className="mt-5 text-xs text-gray-500">
-                                                {readAbleTime(e.createdAt)}
+                                                {moment(e.createdAt).fromNow()}
                                             </p>
                                         </div>
                                     </div>
@@ -63,7 +67,7 @@ export default function Home() {
                 </div>
 
                 {/* side blog */}
-                <div className='p-2 w-full sm:w-[30%] mr-10 mt-5'>
+                <div className='p-2 w-full sm:w-[30%] mr-10 mt-1'>
                     <p className='mb-3'>Most Popular</p>
                     {sideblog.map(e => {
                         return (
@@ -72,10 +76,10 @@ export default function Home() {
                                     <img className='min-w-[150px] max-w[150px] h-[100px] object-cover object-center' src={e?.imageUrl || 'https://images.unsplash.com/photo-1714329159908-b35833f7a6a4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDE4fDZzTVZqVExTa2VRfHxlbnwwfHx8fHw%3D'} alt="" />
                                     <div className='py-2'>
                                         <p className="mt-1 text-gray-900 font-medium clamped-paragraph">
-                                            {e.title}
+                                            {cleantext(e.title)}
                                         </p>
                                         <p className="mt-2 text-xs text-gray-500">
-                                            {readAbleTime(e.createdAt)}
+                                            {moment(e.createdAt).fromNow()}
                                         </p>
                                     </div>
                                 </article>

@@ -1,17 +1,31 @@
-import { useCallback, useMemo, useRef, useState, useEffect } from "react";
+import { useCallback, useMemo, useRef, useState, useEffect, useContext } from "react";
 import { useParams } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import QuillEditor from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.bubble.css";
 import "../assets/css/Editor.css";
+import moment from 'moment';
+import { Authcontext } from "../App";
+
 
 const Editor = () => {
     const { id } = useParams();
+    const defaultimage = 'https://images.unsplash.com/photo-1543362906-acfc16c67564?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJhbGFuY2VkJTIwZGlldHxlbnwwfHwwfHx8MA%3D%3D'
     const [content, setContent] = useState("");
     const [title, setTitle] = useState("");
-    const [banner, setBanner] = useState("https://images.unsplash.com/photo-1715292779491-a32d1f086f5a?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
-    const quill = useRef();
+    const [banner, setBanner] = useState(defaultimage);
+    const [filedraft, setfiledraft] = useState(false);
     const [saved, setsaved] = useState(true);
+    const [previousdata, setpreviousdata] = useState({});
+
+    const authdata = useContext(Authcontext)
+
+    const navigate = useNavigate();
+
+    const quill = useRef();
+
 
     useEffect(() => {
         if (id) {
@@ -19,20 +33,17 @@ const Editor = () => {
         }
     }, [id]);
 
-    useEffect(() => {
-        if (title != '' && content != '' && banner != '') return
-        const interval = setInterval(submitData, 5000);
-        return () => clearInterval(interval);
-    }, [content, title, banner]);
 
     const fetchBlogData = async (id) => {
         try {
-            const response = await fetch(`http://localhost:3000/blog/${id}`);
+            const response = await fetch(authdata.serverurl + `/blog/${id}`);
             if (response.ok) {
                 const data = await response.json();
                 setTitle(data.title);
                 setContent(data.body);
                 setBanner(data.imageUrl);
+                setfiledraft(typeof data.draft !== 'boolean' ? true : data.draft);
+                setpreviousdata(data)
             } else {
                 console.error("Failed to fetch blog data");
             }
@@ -41,19 +52,49 @@ const Editor = () => {
         }
     };
 
+    const filedraftchange = () => {
+        setfiledraft(!filedraft)
+    }
+
+    const deleteBlog = async () => {
+        let alertuser = confirm("Are you sure you want delete this blog?");
+        if (alertuser) {
+            try {
+                const response = await fetch(authdata.serverurl + `/blog/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Blog deleted successfully:', result);
+                    navigate('/space/' + authdata.authdata.userId);
+                } else {
+                    console.error('Failed to delete the blog:', response.status, response.statusText);
+                }
+            } catch (error) {
+                console.error('Error deleting the blog:', error);
+            }
+        }
+    };
+
+
     const submitData = async () => {
         setsaved(false)
         const method = id ? "PUT" : "POST";
-        const url = id ? `http://localhost:3000/blog/${id}` : "http://localhost:3000/blog/";
+        const url = id ? authdata.serverurl + `/blog/${id}` : authdata.serverurl + "/blog/";
 
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
         const raw = JSON.stringify({
-            "userId": "user123",
+            "userId": authdata.authdata.userId,
             "title": title,
             "body": content,
-            "imageUrl": banner || "https://images.unsplash.com/photo-1543362906-acfc16c67564?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJhbGFuY2VkJTIwZGlldHxlbnwwfHwwfHx8MA%3D%3D"
+            "draft": filedraft,
+            "imageUrl": banner || defaultimage
         });
 
         try {
@@ -69,9 +110,12 @@ const Editor = () => {
                 const responseData = await response.json();
                 console.log("Data saved" + responseData.data._id + method);
                 console.log(responseData.data._id);
-                setsaved(true)
+                setpreviousdata(responseData.data);
+                setfiledraft(responseData.data.draft);
+                console.log(responseData.data);
+                setTimeout(() => { setsaved(true) }, 1000);
                 if (method == "POST") {
-                    window.location.href = `./${responseData.data._id}`;
+                    navigate(`./${responseData.data._id}`);
                 }
             } else {
                 console.error("Failed to save data");
@@ -80,6 +124,19 @@ const Editor = () => {
             console.error("Error saving data:", error);
         }
     };
+
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            if (title === previousdata.title && content === previousdata.body && banner === previousdata.imageUrl && filedraft === previousdata.draft) return;
+
+            if (title !== '' && content !== '') {
+                await submitData();
+            }
+        }, 2000);
+
+        return () => clearInterval(interval);
+    }, [content, title, banner, previousdata, filedraft, submitData]);
+
 
     const imageHandler = useCallback(() => {
         const input = document.createElement("input");
@@ -102,32 +159,33 @@ const Editor = () => {
         };
     }, []);
 
-    const modules = useMemo(
-        () => ({
-            toolbar: {
-                container: [
-                    [{ header: [1, 2, 3, 4, false] }],
-                    ["bold", "italic", "underline", "blockquote"],
-                    [{ align: [] }],
-                    [{ color: [] }],
-                    ["code"],
-                    [
-                        { list: "ordered" },
-                        { list: "bullet" },
-                    ],
-                    ["link", "image"],
-                    ["clean"],
+    const imageError = () => {
+        setBanner(defaultimage)
+    }
+
+    const modules = {
+        toolbar: {
+            container: [
+                [{ header: [1, 2, 3, 4, false] }],
+                ["bold"], ["italic"], ["underline"], ["blockquote"],
+                [{ align: [] }],
+                [{ color: [] }],
+                ["code"],
+                [
+                    { list: "ordered" },
+                    { list: "bullet" },
                 ],
-                handlers: {
-                    image: imageHandler,
-                },
+                ["link", "image"],
+                ["clean"],
+            ],
+            handlers: {
+                image: imageHandler,
             },
-            clipboard: {
-                matchVisual: false,
-            },
-        }),
-        [imageHandler]
-    );
+        },
+        clipboard: {
+            matchVisual: false,
+        },
+    };
 
     const formats = [
         "header",
@@ -148,13 +206,40 @@ const Editor = () => {
     ];
 
     return (
-        <div className="flex flex-col-reverse sm:flex-row justify-center items-start gap-5 sm:p-3">
-            <div className="w-full p-2 sm:max-w-[200px] mr-10">
-                <button className="w-full sm:w-[100px] p-2 mt-5 sm:mt-0 border-t-2 rounded">{saved ? 'saved' : 'saving...'}</button>
+        <div className="flex flex-col sm:flex-row justify-center items-start gap-5 sm:p-3">
+            <div className="w-full px-2 sm:max-w-[300px] mr-10 sm:sticky top-5">
+                <ul>
+                    <ul className="bg-gray-100 py-3 mb-3">
+                        <li className="mb-2 text-sm">Created at : {moment(previousdata.createdAt).fromNow()}</li>
+                        <li className="mb-2 text-sm">Updated at : {moment(previousdata.updatedAt).fromNow()}</li>
+                    </ul>
+                </ul>
+
+                <div className="p-2 flex gap-2 justify-between items-center bg-gray-100 mb-3">
+                    Publish
+                    <div onClick={filedraftchange} className={'w-12 h-7 rounded-3xl ' + (filedraft ? 'bg-blue-500' : 'bg-gray-300') + ' p-1 transition-colors duration-300'}>
+                        <div className={'h-full rounded-full aspect-square bg-white ' + (filedraft ? 'float-end' : 'float-start')}></div>
+                    </div>
+                </div>
+
+                <div className="p-2 flex justify-center gap-2 bg-gray-100 mb-3">{saved ? <p className="text-green-500"><i className="ri-check-double-line"></i> Saved</p> : <p className="text-yellow-400"><i className="ri-loader-4-line"></i> Saving</p>}</div>
+
             </div>
             <div className="w-[100vw]  sm:min-w-[700px]">
+                <div className="w-full relative group">
+                    <img src={banner} onError={imageError} alt="" className="w-full group-hover:opacity-50" />
+                    <input
+                        value={banner}
+                        onChange={(e) => { setBanner(e.target.value) }}
+                        type="text"
+                        className="outline-0 top-[50%] translate-y-[-50%] border-2 p-2 w-full absolute hidden group-hover:block"
+                        placeholder="Enter Banner url"
+                    />
+                </div>
+
+
                 <QuillEditor modules={{
-                    clipboard: { matchVisual: false } // Configure clipboard without toolbar
+                    clipboard: { matchVisual: false }
                 }} id="title" theme="bubble" placeholder="Title your masterpiece.."
                     value={title}
                     onChange={(value) => setTitle(value)}
@@ -169,9 +254,11 @@ const Editor = () => {
                     onChange={(value) => setContent(value)}
                 />
             </div>
-            <div className="bg-gray-100 w-[100%] sm:max-w-[300px] sm:-w-[300px] text-center p-2">
-                <img src={banner} alt="" className="w-full sm:w-[300px]" />
-                <input onKeyUp={(e) => { setBanner(e.target.value) }} type="text" className="outline-0  border-2 p-2 w-full mt-3" placeholder="Enter Banner url" />
+            <div className=" w-[100%] sm:max-w-[300px] sm:-w-[300px] text-center p-2">
+                <Link to={'../../blog/' + id}>
+                    <button className="bg-blue-500 w-full py-2 mb-3 text-white  border-2 rounded-lg">See Blog <i className="ri-arrow-right-up-line"></i></button>
+                </Link>
+                <button onClick={deleteBlog} className="bg-red-100 w-full py-1 text-red-600 border-red-300 border-2 rounded-lg"><i className="ri-delete-bin-6-line"></i> Delete</button>
             </div>
         </div>
     );

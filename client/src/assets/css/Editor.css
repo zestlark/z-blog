@@ -1,4 +1,4 @@
-p{
+p {
     line-height: 1.8;
 }
 
@@ -30,24 +30,22 @@ p{
 }
 
 #title .ql-editor.ql-blank::before {
-    font-size: 40px;
-    color: #c5c5c5;
-}
-
-#title .ql-editor.ql-blank::before {
     font-size: 3rem;
-    text-align: center;
-    font-weight: 600;
+    font-weight: 800;
+    color: #c5c5c5;
 }
 
 #title .ql-editor p {
     font-size: 3rem;
-    text-align: center;
-    font-weight: 600;
+    font-weight: 800;
 }
 
 #title .ql-container.ql-bubble .ql-tooltip {
     display: none;
+}
+
+#title .ql-container.ql-bubble p strong {
+    line-height: 0px;
 }
 
 @media (width<400px) {
