@@ -46,7 +46,7 @@ function App() {
             <Route path="/editor/:id" element={authdata.validuser ? <Editor /> : <Navigate to="/auth" />} />
             <Route path="/editor" element={authdata.validuser ? <Editor /> : <Navigate to="/auth" />} />
             <Route path="/blog/" element={<Navigate to="/" />} />
-            <Route path="/blog/:id" element={<Blog />} />
+            <Route path="/blog/:title" element={<Blog />} />
             <Route path="/space" element={<Navigate to="/auth" />} />
             <Route path="/space/:userid" element={authdata.validuser ? <Space /> : <Navigate to="/auth" />} />
           </Routes>

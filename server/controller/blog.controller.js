@@ -1,5 +1,10 @@
 const BlogModel = require('../model/blog.model.js');
 
+const isTextWrappedInTag = (text, html) => {
+    const regex = new RegExp(`<\\w+>[^<]*${text}[^<]*<\/\\w+>`);
+    return regex.test(html);
+};
+
 const addBlog = async (req, res) => {
     try {
         const blog = await BlogModel.create(req.body);
@@ -32,7 +37,23 @@ const getAllBlogsOfUser = async (req, res) => {
 
 const getBlog = async (req, res) => {
     try {
-        const blog = await BlogModel.findById(req.params.id);
+        const title = req.params.title;
+        const query = title ? { draft: true, title } : { draft: true };
+        const blog = await BlogModel.findOne(query);
+        if (!blog) {
+            return res.status(404).json({ message: "Blog not found" });
+        }
+        res.status(200).json(blog);
+    } catch (error) {
+        console.error('Error fetching blog:', error);
+        res.status(500).json({ message: "Failed to fetch blog", error: error.message });
+    }
+};
+
+const getBlogById = async (req, res) => {
+    try {
+        const id = req.params.id;;
+        const blog = await BlogModel.findById(id);
         if (!blog) {
             return res.status(404).json({ message: "Blog not found" });
         }
@@ -76,4 +97,5 @@ module.exports = {
     updateBlog,
     deleteBlog,
     getAllBlogsOfUser,
+    getBlogById
 };

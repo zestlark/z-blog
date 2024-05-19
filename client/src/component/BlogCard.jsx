@@ -6,7 +6,7 @@ import '../assets/css/page.css'
 import '../assets/css/typo.css'
 
 const Blog = () => {
-    const { id } = useParams()
+    const { title } = useParams()
     const [blog, setBlog] = useState({})
     const [error, setError] = useState(false)
 
@@ -26,7 +26,7 @@ const Blog = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/blog/${id}`);
+                const response = await fetch(`http://localhost:3000/blog/${title}`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -40,7 +40,7 @@ const Blog = () => {
         };
 
         fetchData();
-    }, [id]);
+    }, [title]);
 
     useEffect(() => {
         inHtmlText(blog.body, "blogbody");

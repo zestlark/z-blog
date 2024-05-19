@@ -36,7 +36,7 @@ const Editor = () => {
 
     const fetchBlogData = async (id) => {
         try {
-            const response = await fetch(authdata.serverurl + `/blog/${id}`);
+            const response = await fetch(authdata.serverurl + `/blog/id/${id}`);
             if (response.ok) {
                 const data = await response.json();
                 setTitle(data.title);
@@ -89,9 +89,13 @@ const Editor = () => {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
+        const div = document.createElement("div")
+        div.innerHTML = title;
+        let title2 = div.textContent;
+
         const raw = JSON.stringify({
             "userId": authdata.authdata.userId,
-            "title": title,
+            "title": title2,
             "body": content,
             "draft": filedraft,
             "imageUrl": banner || defaultimage
@@ -127,7 +131,7 @@ const Editor = () => {
 
     useEffect(() => {
         const interval = setInterval(async () => {
-            if (title === previousdata.title && content === previousdata.body && banner === previousdata.imageUrl && filedraft === previousdata.draft) return;
+            if (cleanText(title) === previousdata.title && content === previousdata.body && banner === previousdata.imageUrl && filedraft === previousdata.draft) return;
 
             if (title !== '' && content !== '') {
                 await submitData();
@@ -205,6 +209,12 @@ const Editor = () => {
         "code"
     ];
 
+    const cleanText = (data) => {
+        const div = document.createElement('div');
+        div.innerHTML = data;
+        return div.textContent;
+    }
+
     return (
         <div className="flex flex-col sm:flex-row justify-center items-start gap-5 sm:p-3">
             <div className="w-full px-2 sm:max-w-[300px] mr-10 sm:sticky top-5">
@@ -255,9 +265,11 @@ const Editor = () => {
                 />
             </div>
             <div className=" w-[100%] sm:max-w-[300px] sm:-w-[300px] text-center p-2">
-                <Link to={'../../blog/' + id}>
-                    <button className="bg-blue-500 w-full py-2 mb-3 text-white  border-2 rounded-lg">See Blog <i className="ri-arrow-right-up-line"></i></button>
-                </Link>
+                {filedraft ?
+                    <Link to={'../../blog/' + previousdata.title}>
+                        <button className="bg-blue-500 w-full py-2 mb-3 text-white  border-2 rounded-lg">See Blog <i className="ri-arrow-right-up-line"></i></button>
+                    </Link> : ''
+                }
                 <button onClick={deleteBlog} className="bg-red-100 w-full py-1 text-red-600 border-red-300 border-2 rounded-lg"><i className="ri-delete-bin-6-line"></i> Delete</button>
             </div>
         </div>

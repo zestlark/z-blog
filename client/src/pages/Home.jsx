@@ -45,7 +45,7 @@ export default function Home() {
                     {blogs.length === 0 ? <LoadingAndError error={error} /> : blogs.map(e => {
                         return (
                             <article className='w-[45%] md:max-w-[30%]' key={e?._id}>
-                                <Link to={`/blog/${e._id}`} >
+                                <Link to={`/blog/${e.title}`} >
                                     <div className="flex flex-col bg-white border shadow-sm rounded-xl" >
                                         <img className="w-full object-cover rounded-t-xl aspect-video" src={e?.imageUrl || 'https://images.unsplash.com/photo-1714329159908-b35833f7a6a4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDE4fDZzTVZqVExTa2VRfHxlbnwwfHx8fHw%3D'} alt="Image Description" />
                                         <div className="p-4 md:p-5">
