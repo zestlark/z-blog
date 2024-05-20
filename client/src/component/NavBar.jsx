@@ -37,7 +37,7 @@ const NavBar = () => {
                         <Link to={'/'}>
                             <span className="font-normal text-blue-500" href="#" aria-current="page">Home</span>
                         </Link>
-                        <Link to={'/space'}>
+                        <Link to={authdata.authdata.userId ? '/space/' + authdata.authdata.userId : '/auth'}>
                             <span className="font-normal text-gray-400" href="#" aria-current="page">Spaces</span>
                         </Link>
                         <Link to={'https://zestlark-0.web.app'}>
