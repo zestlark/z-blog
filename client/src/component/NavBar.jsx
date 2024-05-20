@@ -37,7 +37,12 @@ const NavBar = () => {
                         <Link to={'/'}>
                             <span className="font-normal text-blue-500" href="#" aria-current="page">Home</span>
                         </Link>
-                        <a className="font-normal text-gray-600 hover:text-gray-400" href="#">Portfolio</a>
+                        <Link to={'/space'}>
+                            <span className="font-normal text-gray-400" href="#" aria-current="page">Spaces</span>
+                        </Link>
+                        <Link to={'https://zestlark-0.web.app'}>
+                            <span className="font-normal text-gray-400" href="#" aria-current="page">Portfolio</span>
+                        </Link>
                     </div>
                 </div>
             </nav>
