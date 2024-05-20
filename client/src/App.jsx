@@ -6,6 +6,7 @@ import Editor from './pages/Editor';
 import Space from './pages/Space';
 import Auth from './pages/Auth';
 import { createContext, useState, useContext, useEffect } from 'react';
+import NotFound from './pages/NotFound';
 
 export const Authcontext = createContext();
 
@@ -49,6 +50,7 @@ function App() {
             <Route path="/blog/:title" element={<Blog />} />
             <Route path="/space" element={<Navigate to="/auth" />} />
             <Route path="/space/:userid" element={authdata.validuser ? <Space /> : <Navigate to="/auth" />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </>
       </BrowserRouter>
