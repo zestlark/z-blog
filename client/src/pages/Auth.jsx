@@ -51,7 +51,7 @@ export default function Auth() {
                 <form onSubmit={handleSubmit} className="sm:w-[50%] flex flex-col bg-gray-100 py-8 sm:py-0 px-6 justify-center leading-10">
                     <h2 className='text-3xl font-bold mb-2'>Sign in to your account</h2>
                     <p className='text-sm mt-3 text-gray-500'>
-                        Got it, how about this? "Be Part of Our Exclusive Community! * Please Note: We're currently not accepting new members.
+                        Be Part of Our Exclusive Community! * Please Note: We're currently not accepting new members.
                     </p>
                     <p className='mb-5 text-gray-500'><small>Check back later for updates!</small></p>
 
