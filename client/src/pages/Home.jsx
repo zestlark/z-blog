@@ -71,7 +71,7 @@ export default function Home() {
                     <p className='mb-3'>Most Popular</p>
                     {sideblog.map(e => {
                         return (
-                            <Link to={`/blog/${e._id}`} key={e._id}>
+                            <Link to={`/blog/${e.title}`} key={e._id}>
                                 <article className="bg-white flex items-center gap-5 rounded-xl overflow-hidden border mb-3">
                                     <img className='min-w-[150px] max-w[150px] h-[100px] object-cover object-center' src={e?.imageUrl || 'https://images.unsplash.com/photo-1714329159908-b35833f7a6a4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDE4fDZzTVZqVExTa2VRfHxlbnwwfHx8fHw%3D'} alt="" />
                                     <div className='py-2'>

@@ -13,7 +13,7 @@ const NavBar = () => {
 
     return (
         <header className="flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-white text-sm py-4">
-            <nav className="max-w-[85rem] w-full mx-auto px-4 flex flex-wrap basis-full items-center justify-between" aria-label="Global">
+            <nav className="max-w-[85rem] w-full mx-auto px-4 flex flex-wrap  basis-full items-center justify-between" aria-label="Global">
                 <Link to={'/'}>
                     <span className="sm:order-1 flex-none text-base font-medium uppercase text-black flex items-center justify-start gap-2" href="#"><img className='w-6' src="/logo.png" alt="" />blogs</span>
                 </Link>
@@ -28,7 +28,7 @@ const NavBar = () => {
 
                     <Link to={authdata.authdata.validuser ? 'editor' : 'auth'}>
                         <button type="button" className="py-3 px-6 ml-2 inline-flex items-center gap-x-2 text-sm font-normal rounded-full border border-gray-900 bg-black text-white shadow-sm hover:bg-transparent hover:text-black disabled:opacity-50 disabled:pointer-events-none">
-                            {authdata.authdata.validuser ? <span><i className="ri-pencil-line"></i> New Blog</span> : 'Get Started  '}
+                            {authdata.authdata.validuser ? <span><i className="ri-pencil-line"></i> Write</span> : 'Get Started  '}
                         </button>
                     </Link>
                 </div>

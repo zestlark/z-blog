@@ -12,7 +12,7 @@ import { Authcontext } from "../App";
 
 const Editor = () => {
     const { id } = useParams();
-    const defaultimage = 'https://images.unsplash.com/photo-1543362906-acfc16c67564?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJhbGFuY2VkJTIwZGlldHxlbnwwfHwwfHx8MA%3D%3D'
+    const defaultimage = 'https://images.unsplash.com/photo-1716051118419-bc8a43d898ba?q=80&w=1858&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
     const [content, setContent] = useState("");
     const [title, setTitle] = useState("");
     const [banner, setBanner] = useState(defaultimage);

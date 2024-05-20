@@ -46,7 +46,7 @@ export default function Auth() {
         <div className='h-[90vh] sm:h-[80vh] flex justify-center items-center px-5 sm:px-0'>
             <div className='max-w-4xl mx-auto sm:max-h-[500px] sm:flex rounded-lg overflow-hidden'>
                 <div className="img sm:w-[50%] max-h-40 sm:max-h-full overflow-hidden">
-                    <img className='w-full h-full object-cover' src="https://images.unsplash.com/photo-1497290756760-23ac55edf36f?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
+                    <img className='w-full h-full object-cover' src="https://images.unsplash.com/photo-1715550722304-b6ee97071817?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
                 </div>
                 <form onSubmit={handleSubmit} className="sm:w-[50%] flex flex-col bg-gray-100 py-8 sm:py-0 px-6 justify-center leading-10">
                     <h2 className='text-3xl font-bold mb-2'>Sign in to your account</h2>
