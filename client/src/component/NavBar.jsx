@@ -15,7 +15,7 @@ const NavBar = () => {
         <header className="flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-white text-sm py-4">
             <nav className="max-w-[85rem] w-full mx-auto px-4 flex flex-wrap basis-full items-center justify-between" aria-label="Global">
                 <Link to={'/'}>
-                    <span className="sm:order-1 flex-none text-base font-medium uppercase text-black" href="#">z blogs</span>
+                    <span className="sm:order-1 flex-none text-base font-medium uppercase text-black flex items-center justify-start gap-2" href="#"><img className='w-6' src="/logo.png" alt="" />blogs</span>
                 </Link>
                 <div className="sm:order-3 flex items-center gap-x-2">
 

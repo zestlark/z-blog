@@ -12,7 +12,7 @@ export const Authcontext = createContext();
 function App() {
   const [authdata, setauthdata] = useState({ validuser: false });
   const [loading, setLoading] = useState(true);
-  const serverurl = 'https://z-blog-4h05.onrender.com'
+  const serverurl = "https://z-blog-4h05.onrender.com"
 
   useEffect(() => {
     const data = localStorage.getItem('authdata');
