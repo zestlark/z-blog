@@ -25,8 +25,12 @@ export default function Home() {
                 .then(res =>
                     res.json()
                 ).then(res => {
-                    setblogs(res.reverse().splice(0, 6))
-                    setsideblog(res.splice(0, 4))
+                    let refres = [...res]
+                    let halfLength = Math.floor(refres.length / 1.5);
+                    let x = halfLength - (halfLength % 3);
+                    let y = refres.length - x;
+                    setblogs(res.reverse().splice(0, x))
+                    setsideblog(res.splice(0, y))
                     seterror(false)
 
                 })
@@ -39,9 +43,9 @@ export default function Home() {
     return (
         <>
             <Banner />
-            <div className='flex justify-center flex-col sm:flex-row'>
+            <div className='flex justify-center flex-col sm:flex-row items-start'>
                 {/* main blog */}
-                <div className='flex flex-wrap container max-w-7xl mx-auto gap-2 sm:gap-5 mt-5 justify-center mb-5'>
+                <div className='flex flex-wrap container max-w-7xl mx-auto gap-2 sm:gap-5 mt-5 justify-center items-start mb-5'>
                     {blogs.length === 0 ? <LoadingAndError error={error} /> : blogs.map(e => {
                         return (
                             <article className='w-[45%] md:max-w-[30%]' key={e?._id}>

@@ -46,7 +46,7 @@ const NavBar = () => {
                     res.json()
                 ).then(res => {
                     setblogs(res.reverse())
-                    setsearchblog(res.reverse())
+                    setsearchblog(res)
                 })
         } catch (error) {
             console.error('Error fetching blog data:', error);
@@ -57,17 +57,17 @@ const NavBar = () => {
     return (
         <>
             {showSearch ?
-                <div onClick={() => { setshowSearch(false) }} className="fixed w-svw h-svh t-0 l-0 z-10 px-3" style={{ 'background': '#00000055', 'backdropFilter': 'blur(10px)' }}>
+                <div onClick={() => { setshowSearch(false) }} className="fixed w-svw h-svh t-0 l-0 z-10 px-3" style={{ 'background': '#fff', 'backdropFilter': 'blur(10px)' }}>
                     <div onClick={(e) => { e.stopPropagation() }} className='block w-full max-w-[600px] mx-auto'>
                         <div className='flex justify-center items-center mt-5 sm:mt-20 gap-2'>
                             <input onChange={(e) => setsearchtext(e.target.value)} autoFocus value={searchtext} type="text" className='w-full max-w-[400px] p-2 px-5 outline-none mx-auto block rounded-full border border-black' placeholder='Search' />
-                            <i onClick={() => { setshowSearch(false) }} className="ri-close-circle-fill scale-110 text-2xl h-6 w-6 text-red-500 p-0 m-0 flex justify-center items-center"></i>
+                            <i onClick={() => { setshowSearch(false) }} className="ri-close-circle-fill scale-110 text-2xl h-6 w-6 text-red-500 p-0 m-0 flex justify-center items-center cursor-pointer"></i>
                         </div>
                         <div className='mt-5 overflow-scroll h-[80vh]'>
                             {searchblog.map(e => {
                                 return (
                                     <Link key={e._id} onClick={() => { setshowSearch(false) }} to={'/blog/' + e.title}>
-                                        <div className='flex p-2 bg-white mb-2 rounded-md w-full max-w-[600px] mx-auto'>
+                                        <div className='flex p-2 bg-[#f5f5f5] mb-2 rounded-md w-full max-w-[600px] mx-auto'>
                                             <img className='w-[100px] rounded-md aspect-video bg-white' src={e.imageUrl} alt="" />
                                             <p className=' flex flex-col justify-center items-start leading-none p-2'>
                                                 <span className='clamped-paragraph-one font-bold'>{e.title}</span><br />
