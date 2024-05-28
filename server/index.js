@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const dotenv = require('dotenv');
+dotenv.config();
 
 // Import router
 const blogRouter = require('./router/blogs.router.js');
@@ -14,7 +16,9 @@ app.use('/blog', blogRouter);
 
 app.use('/auth', authRouter)
 
-mongoose.connect('mongodb+srv://kanojiyadeepak747:mDiJmKJ4PEahNY9t@cluster0.jbrm0wt.mongodb.net/App?retryWrites=true&w=majority')
+const mongoUri = process.env.MONGODB_URI;
+
+mongoose.connect(mongoUri)
     .then(() => {
         app.listen(3000, () => {
             console.log('server is running on port 3000')
