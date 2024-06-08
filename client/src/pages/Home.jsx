@@ -26,10 +26,10 @@ export default function Home() {
                     res.json()
                 ).then(res => {
                     let refres = [...res]
-                    let halfLength = Math.floor(refres.length / 1.5);
+                    let halfLength = Math.floor(refres.length / 1.7);
                     let x = halfLength - (halfLength % 3);
                     let y = refres.length - x;
-                    setblogs(res.reverse().splice(0, x))
+                    setblogs(res.reverse().splice(0, 12))
                     setsideblog(res.splice(0, y))
                     seterror(false)
 
@@ -72,7 +72,7 @@ export default function Home() {
 
                 {/* side blog */}
                 <div className='p-2 w-full sm:w-[30%] mr-10 mt-1'>
-                    <p className='mb-3'>Most Popular</p>
+                    <p className='mb-3'>Other blogs</p>
                     {sideblog.map(e => {
                         return (
                             <Link to={`/blog/${e.title}`} key={e._id}>

@@ -6,6 +6,11 @@ const Banner = () => {
 
     useEffect(() => {
         const fetchImages = async () => {
+            let sessiondata = sessionStorage.getItem('bannerImage')
+            if (sessiondata) {
+                setBannerImage('url(' + sessiondata + ')');
+                return
+            }
             try {
                 const res = await fetch(
                     "https://api.pexels.com/v1/search?query=day scenery&orientation=landscape&size=large&per_page=25",
@@ -15,11 +20,10 @@ const Banner = () => {
                 );
                 const json = await res.json();
                 const images = json['photos'];
-                console.log(images);
                 if (images.length > 0) {
                     const image = images[Math.floor(Math.random() * images.length)]['src']['large'];
                     setBannerImage('url(' + image + ')');
-                    console.log(image);
+                    sessionStorage.setItem('bannerImage', image);
                 }
             } catch (error) {
                 console.error('Error fetching images:', error);
@@ -33,13 +37,13 @@ const Banner = () => {
     }, [dataLoaded]);
 
     return (
-        <div className="bg-white border shadow-sm py-[60px] overflow-hidden" style={{ backgroundImage: bannerImage, backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}>
-            <div className="container mx-auto">
-                <div className="p-4 md:p-5 flex flex-col justify-center items-center ">
-                    <h3 className="font-black text-4xl text-center mb-2 mix-blend-overlay">
+        <div className="bg-white border shadow-sm py-[0px] overflow-hidden" style={{ backgroundImage: bannerImage, backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}>
+            <div className="mx-auto">
+                <div className="p-4 md:p-5 py-[60px] md:py-[60px] flex flex-col justify-center items-center min-w-full min-h-[30px] bg-[#ffffff66]">
+                    <h3 className="font-black text-4xl text-center mb-2 text-black">
                         Discover Inspiring Stories Here!
                     </h3>
-                    <p className="font-medium text-gray-800 text-center mix-blend-hard-light">
+                    <p className="font-medium text-gray-800 text-center">
                         Explore, Learn, and Inspire: Your Gateway to Infinite Knowledge.
                     </p>
                 </div>

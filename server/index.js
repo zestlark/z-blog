@@ -10,8 +10,8 @@ const authRouter = require('./router/auth.router.js')
 
 const app = express();
 
-app.use(cors()); // Enable CORS
-app.use(express.json()); // Parse JSON request bodies
+app.use(cors());
+app.use(express.json());
 app.use('/blog', blogRouter);
 
 app.use('/auth', authRouter)
