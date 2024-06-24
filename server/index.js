@@ -7,6 +7,7 @@ dotenv.config();
 // Import router
 const blogRouter = require('./router/blogs.router.js');
 const authRouter = require('./router/auth.router.js')
+const zestlarkService = require('./router/zestlark.service.router.js')
 
 const app = express();
 
@@ -14,7 +15,9 @@ app.use(cors());
 app.use(express.json());
 app.use('/blog', blogRouter);
 
-app.use('/auth', authRouter)
+app.use('/auth', authRouter);
+
+app.use('/zestlark/service', zestlarkService)
 
 const mongoUri = process.env.MONGODB_URI;
 
