@@ -16,8 +16,8 @@ async function fetchUrlTitle(url) {
 
         return { title };
     } catch (error) {
-        console.error('Error fetching URL info:', error.message);
-        return { title: 'Error' };
+        const alternativeTitle = new URL(url);
+        return { title: alternativeTitle.hostname };
     }
 }
 
