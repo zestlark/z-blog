@@ -7,6 +7,14 @@ const cheerio = require('cheerio');
 const { URL } = require('url');
 
 async function fetchUrlTitle(url) {
+    if (!url) {
+        return false;
+    }
+
+    if (!/^https?:\/\//i.test(url)) {
+        url = 'http://' + url;
+    }
+
     try {
         const response = await axios.get(url);
         const html = response.data;
