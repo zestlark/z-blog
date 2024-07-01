@@ -131,11 +131,14 @@ const Editor = () => {
 
     useEffect(() => {
         const interval = setInterval(async () => {
-            if (cleanText(title) === previousdata.title && content === previousdata.body && banner === previousdata.imageUrl && filedraft === previousdata.draft) return;
+            if (saved) {
+                if (cleanText(title) === previousdata.title && content === previousdata.body && banner === previousdata.imageUrl && filedraft === previousdata.draft) return;
 
-            if (title !== '' && content !== '') {
-                await submitData();
+                if (title !== '' && content !== '') {
+                    await submitData();
+                }
             }
+
         }, 2000);
 
         return () => clearInterval(interval);
@@ -232,8 +235,6 @@ const Editor = () => {
                     </div>
                 </div>
 
-                <div className="p-2 flex justify-center gap-2 bg-gray-100 mb-3">{saved ? <p className="text-green-500"><i className="ri-check-double-line"></i> Saved</p> : <p className="text-yellow-400"><i className="ri-loader-4-line"></i> Saving</p>}</div>
-
             </div>
             <div className="w-[100vw]  sm:min-w-[700px]">
                 <div className="w-full relative group">
@@ -264,10 +265,12 @@ const Editor = () => {
                     onChange={(value) => setContent(value)}
                 />
             </div>
-            <div className=" w-[100%] sm:max-w-[300px] sm:-w-[300px] text-center p-2">
+            <div className=" w-[100%] sm:max-w-[300px] sm:-w-[300px] text-center p-2 md:sticky top-2">
+                <div onClick={submitData} className="p-2 flex justify-center gap-2 bg-gray-100 mb-3 rounded-lg">{saved ? <p className="text-green-500"><i className="ri-check-double-line"></i> Saved</p> : <p className="text-yellow-400"><i className="ri-loader-4-line"></i> Saving</p>}</div>
+
                 {filedraft ?
                     <Link to={'../../blog/' + previousdata.title}>
-                        <button className="bg-blue-500 w-full py-2 mb-3 text-white  border-2 rounded-lg">See Blog <i className="ri-arrow-right-up-line"></i></button>
+                        <button className="bg-blue-500 w-full py-2 mb-3 text-white rounded-lg">See Blog <i className="ri-arrow-right-up-line"></i></button>
                     </Link> : ''
                 }
                 <button onClick={deleteBlog} className="bg-red-100 w-full py-1 text-red-600 border-red-300 border-2 rounded-lg"><i className="ri-delete-bin-6-line"></i> Delete</button>

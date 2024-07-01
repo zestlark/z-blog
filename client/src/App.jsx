@@ -7,6 +7,8 @@ import Space from './pages/Space';
 import Auth from './pages/Auth';
 import { createContext, useState, useContext, useEffect } from 'react';
 import NotFound from './pages/NotFound';
+import { HelmetProvider } from 'react-helmet-async';
+const helmetContext = {};
 
 export const Authcontext = createContext();
 
@@ -37,24 +39,26 @@ function App() {
   }
 
   return (
-    <Authcontext.Provider value={{ authdata, setauthdata, serverurl }}>
-      <BrowserRouter>
-        <>
-          <NavBar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/editor/:id" element={authdata.validuser ? <Editor /> : <Navigate to="/auth" />} />
-            <Route path="/editor" element={authdata.validuser ? <Editor /> : <Navigate to="/auth" />} />
-            <Route path="/blog/" element={<Navigate to="/" />} />
-            <Route path="/blog/:title" element={<Blog />} />
-            <Route path="/space" element={<Navigate to="/auth" />} />
-            <Route path="/space/:userid" element={authdata.validuser ? <Space /> : <Navigate to="/auth" />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </>
-      </BrowserRouter>
-    </Authcontext.Provider>
+    <HelmetProvider context={helmetContext}>
+      <Authcontext.Provider value={{ authdata, setauthdata, serverurl }}>
+        <BrowserRouter>
+          <>
+            <NavBar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/editor/:id" element={authdata.validuser ? <Editor /> : <Navigate to="/auth" />} />
+              <Route path="/editor" element={authdata.validuser ? <Editor /> : <Navigate to="/auth" />} />
+              <Route path="/blog/" element={<Navigate to="/" />} />
+              <Route path="/blog/:title" element={<Blog />} />
+              <Route path="/space" element={<Navigate to="/auth" />} />
+              <Route path="/space/:userid" element={authdata.validuser ? <Space /> : <Navigate to="/auth" />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </>
+        </BrowserRouter>
+      </Authcontext.Provider>
+    </HelmetProvider>
   );
 }
 

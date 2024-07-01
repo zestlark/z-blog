@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from 'react-router-dom'
 import { Authcontext } from "../App";
 import LoadingAndError from '../component/LoadingAndError'
+import { Helmet } from 'react-helmet-async';
 import '../assets/css/page.css'
 
 import '../assets/css/typo.css'
@@ -10,6 +11,8 @@ const Blog = () => {
     const { title } = useParams()
     const [blog, setBlog] = useState({})
     const [error, setError] = useState(false)
+
+    const defaultimage = 'https://images.unsplash.com/photo-1714329159908-b35833f7a6a4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDE4fDZzTVZqVExTa2VRfHxlbnwwfHx8fHw%3D'
 
     const authdata = useContext(Authcontext)
 
@@ -57,13 +60,29 @@ const Blog = () => {
         <>
             {!blog || !blog._id ? <LoadingAndError error={error} /> :
                 <div>
-                    <img className="max-w-4xl mx-auto w-full aspect-auto object-cover" src={blog.imageUrl || 'https://images.unsplash.com/photo-1714329159908-b35833f7a6a4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDE4fDZzTVZqVExTa2VRfHxlbnwwfHx8fHw%3D'} alt="Image Description" />
+                    <img className="max-w-4xl mx-auto w-full aspect-auto object-cover" src={blog.imageUrl || defaultimage} alt="Image Description" />
 
                     <div className="max-w-4xl mx-auto p-5">
                         <h1 className="font-black text-4xl p-1 pl-0 mt-5">{cleanText(blog.title)}</h1>
                         <li className="p-1 my-5 text-sm text-gray-500">by {getusernamebyid(blog.userId)}</li>
                         <div className="mt-5" id="blogbody"></div>
                     </div>
+
+                    <Helmet>
+                        <title>{cleanText(blog.title)}</title>
+                        <meta name='description' content={cleanText(blog.body.slice(0, 100))} />
+
+                        <meta property="og:title" content={cleanText(blog.title)} />
+                        <meta property="og:description" content={cleanText(blog.body.slice(0, 100))} />
+                        <meta property="og:type" content="article" />
+                        <meta property="og:url" content={window.location.href} />
+                        <meta property="og:image" content={blog.imageUrl || defaultimage} />
+
+                        <meta name="twitter:card" content="summary_large_image" />
+                        <meta name="twitter:title" content={cleanText(blog.title)} />
+                        <meta name="twitter:description" content={cleanText(blog.body.slice(0, 100))} />
+                        <meta name="twitter:image" content={blog.imageUrl || defaultimage} />
+                    </Helmet>
                 </div>
             }
         </>
