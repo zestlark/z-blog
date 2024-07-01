@@ -1,15 +1,5 @@
 {
   "projects": {
-    "default": "zestlark-0"
-  },
-  "targets": {
-    "zestlark-0": {
-      "hosting": {
-        "blog": [
-          "blog-zestlark-0"
-        ]
-      }
-    }
-  },
-  "etags": {}
+    "default": "zblogs-0"
+  }
 }

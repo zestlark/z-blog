@@ -5,7 +5,7 @@ import NavBar from './component/NavBar';
 import Editor from './pages/Editor';
 import Space from './pages/Space';
 import Auth from './pages/Auth';
-import { createContext, useState, useContext, useEffect } from 'react';
+import { createContext, useState, useEffect } from 'react';
 import NotFound from './pages/NotFound';
 import { HelmetProvider } from 'react-helmet-async';
 const helmetContext = {};
@@ -35,7 +35,7 @@ function App() {
   }, [authdata]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className='min-h-screen flex justify-center items-center'>Loading...</div>;
   }
 
   return (
